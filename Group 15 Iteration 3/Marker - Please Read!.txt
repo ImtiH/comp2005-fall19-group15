@@ -8,8 +8,8 @@ Once you run the program you will see a setting menu you can
 5) start the game.
 
 will looked different from last iteration but is functionaly the same.
-player number and how many human players are implimented but computer difficulty
-and colorblindmode are not they set do variables but are not currently used.
+player number, how many human players, and colorblindmode are implimented but computer difficulty.
+
 
 once you start the game you will see and be able to do
 1) the game board, a 20 x 20 grid where you can place your piece
@@ -25,3 +25,6 @@ controls
 board rules
    placement of pieces will follow blockus rules (move validation)
    (turns not implimented so you can only place (player 1 / blue) pieces)
+
+at the moment colorblind mode turns every piece black will work on improving it in next iteration.
+roate and filp piece work great.
