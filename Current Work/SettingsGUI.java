@@ -61,7 +61,7 @@ public class SettingsGUI extends JFrame implements ActionListener {
         getContentPane().add(options);
         
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 		setVisible(true);
     }
 

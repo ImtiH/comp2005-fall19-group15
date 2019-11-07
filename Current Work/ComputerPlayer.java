@@ -3,7 +3,7 @@
  */
 import java.util.LinkedList;
 
-public class ComputerPlayer {
+public class ComputerPlayer implements Player {
 	private LinkedList<Piece> pieces;
 	private boolean firstTurn;
 	private boolean playing;

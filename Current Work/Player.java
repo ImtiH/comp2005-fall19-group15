@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 /**
  * inferface for both Human and Computer Players.
  */
@@ -7,6 +9,6 @@ public interface Player {
 	
 	int getScore();
 	
-	int getPieces();
+	LinkedList<Piece> getPieces();
 
 }

@@ -6,17 +6,19 @@
 import java.awt.Color;
 import javax.swing.*;
 
-public class Squares extends JPanel {
+public class Squares {
+	public static final int NONE = 0;
+    public static final int BLUE = 1;
+    public static final int RED = 2;
+    public static final int YELLOW = 3;
+	public static final int GREEN = 4;
 	private int x, y, value, color;
 	
 	public Squares(int x, int y) {
-		super();
 		this.x = x;
 		this.y = y;
-		this.value = 0;
-		this.color = 0;
-		this.setBackground(Color.WHITE);
-		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.value = NONE;
+		this.color = NONE;
 	}
 	
 	public int getX() {
@@ -31,9 +33,16 @@ public class Squares extends JPanel {
 		return this.value;
 	}
 	
-	public int getColor() {
-		return this.color;
-	}
+	public Color getColor() {
+	      switch (this.color)
+	      {
+	         case BLUE: return Color.BLUE;
+	         case RED: return Color.RED;
+	         case YELLOW: return Color.YELLOW;
+	         case GREEN: return new Color(0, 128, 0);
+	         default: return Color.WHITE;
+	      }
+	   }
 	
 	public void setX(int x) {
 		this.x = x;
