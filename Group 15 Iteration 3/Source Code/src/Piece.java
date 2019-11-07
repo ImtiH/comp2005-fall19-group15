@@ -14,6 +14,7 @@ public class Piece {
     public static final int RED = 2;
     public static final int YELLOW = 3;
 	public static final int GREEN = 4;
+	public static final int BLACK = 5;
 	
 	private int[][] shape;
 	private int color;
@@ -32,6 +33,7 @@ public class Piece {
 	         case RED: return Color.RED;
 	         case YELLOW: return Color.YELLOW;
 	         case GREEN: return new Color(0, 128, 0);
+	         case BLACK: return Color.BLACK;
 	         default: return Color.LIGHT_GRAY;
 	      }
 	   }
