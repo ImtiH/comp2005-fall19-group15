@@ -58,14 +58,21 @@ public class Blokus {
     }
     
     public void startGame() {
+    	int colormode = 0;
     	players = new Player [4];
     	for(int i = 0; i < getNumPlayers(); ++i) {
+    		if(colorBlindMode) {
+    			colormode = 5;
+    		}
+    		else {
+    			colormode = i + 1;
+    		}
     		if(i < getHumanPlayers()) {
-    			HumanPlayer human = new HumanPlayer(i + 1); 
+    			HumanPlayer human = new HumanPlayer(colormode); 
     			players[i] = human;
     		}
     		else {
-    			ComputerPlayer computer = new ComputerPlayer(i + 1, difficulty, new BlokusBoard());
+    			ComputerPlayer computer = new ComputerPlayer(colormode, difficulty, new BlokusBoard());
     			players[i] = computer;
     		}
     	}
