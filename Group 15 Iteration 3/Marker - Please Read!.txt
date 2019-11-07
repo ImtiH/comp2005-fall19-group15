@@ -8,7 +8,7 @@ Once you run the program you will see a setting menu you can
 5) start the game.
 
 will looked different from last iteration but is functionaly the same.
-player number, how many human players, and colorblindmode are implimented but computer difficulty.
+player number, how many human players, and colorblindmode are implimented.
 
 
 once you start the game you will see and be able to do
