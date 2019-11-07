@@ -1,0 +1,27 @@
+this is a brief explanation of how the current iteration works.
+ 
+Once you run the program you will see a setting menu you can 
+1) select how many player their are
+2) select how many of the players are human
+3) select the difficulty of the computer if there is any
+4) turn on or off colorblindmode
+5) start the game.
+
+will looked different from last iteration but is functionaly the same.
+player number and how many human players are implimented but computer difficulty
+and colorblindmode are not they set do variables but are not currently used.
+
+once you start the game you will see and be able to do
+1) the game board, a 20 x 20 grid where you can place your piece
+2) the piece menu where you can select which piece you will be using
+   (the first piece is always selected by default.)
+3) the piece you have selected will have a preview on the board
+   where it will be placed when you click the mouse.
+controls
+   you can rotate the piece with the mouse scroll wheel
+   and flip with right click and place with left click.
+   (the piece menu will update to show that the piece you place
+   has been remove from your piece menu and will select the next avalible piece)
+board rules
+   placement of pieces will follow blockus rules (move validation)
+   (turns not implimented so you can only place (player 1 / blue) pieces)
