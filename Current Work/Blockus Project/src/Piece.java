@@ -11,10 +11,13 @@ public class Piece {
 	public static final int BLANK = 0;
 	public static final int NONE = 0;
     public static final int BLUE = 1;
-    public static final int RED = 2;
-    public static final int YELLOW = 3;
+    public static final int YELLOW = 2;
+    public static final int RED = 3;
 	public static final int GREEN = 4;
-	public static final int BLACK = 5;
+	public static final int CB_BLUE = 5;
+	public static final int CB_YELLOW = 6;
+	public static final int CB_RED = 7;
+	public static final int CB_GREEN = 8;
 	
 	private int[][] shape;
 	private int color;
@@ -25,18 +28,20 @@ public class Piece {
 		this.color = color;
 	}
 	
-	public Color getColor()
-	   {
-	      switch (this.color)
-	      {
-	         case BLUE: return Color.BLUE;
-	         case RED: return Color.RED;
+	public Color getColor() {
+		switch (this.color) 
+		{
+		     case BLUE: return Color.BLUE;
 	         case YELLOW: return Color.YELLOW;
+	         case RED: return Color.RED;
 	         case GREEN: return new Color(0, 128, 0);
-	         case BLACK: return Color.BLACK;
+	         case CB_BLUE: return new Color(30, 136, 229);
+	         case CB_YELLOW: return new Color(255, 193, 7);
+	         case CB_RED: return new Color(216, 27, 96);
+	         case CB_GREEN: return new Color(0, 77, 64);
 	         default: return Color.LIGHT_GRAY;
-	      }
-	   }
+	    }
+	}
 	
 	public int getColorNum() {
 		return this.color;
@@ -44,6 +49,10 @@ public class Piece {
 	
 	public int getValue(int x, int y) {
 		return this.shape[y][x];
+	}
+	
+	public int[][] getShape() {
+		return this.shape;
 	}
 	
 	public void rotateClockwise() {

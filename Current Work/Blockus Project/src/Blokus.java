@@ -5,18 +5,28 @@ public class Blokus {
     private int numberPlayers;
     private int humanPlayers;
     private int difficulty;
+    private boolean fourPlayerMode;
+    private boolean threePlayerMode;
+    private boolean twoPlayerMode;
     private boolean colorBlindMode;
+    private boolean advanceScore;
     private SettingsGUI settings;
     private Player players[];
-    private int currentTurn;
-    private boolean gameOver;
+    private Shapes shapes;
+    private int turn;
     private BlokusGameGUI blokusGame;
     
     public Blokus() {
-        this.numberPlayers = 2;
-        this.humanPlayers = 1;
+        this.numberPlayers = 4;
+        this.humanPlayers = 4;
         this.difficulty = 0;
+        this.fourPlayerMode = true;
+        this.threePlayerMode = false;
+        this.twoPlayerMode = false;
         this.colorBlindMode = false;
+        this.advanceScore = false;
+        this.turn = 0;
+        this.shapes = new Shapes();
         this.settings = new SettingsGUI(this);
     }
 
@@ -32,9 +42,28 @@ public class Blokus {
         this.difficulty = diff;
     }
     
+    public void SetTurn(int num) {
+    	this.turn = num;
+    }
     
-    public void setColorBlindMode(boolean col) {
-        this.colorBlindMode = col;
+    public void setFourPlayerMode(boolean mode) {
+    	this.fourPlayerMode = mode;
+    }
+    
+    public void setThreePlayerMode(boolean mode) {
+    	this.threePlayerMode = mode;
+    }
+    
+    public void setTwoPlayerMode(boolean mode) {
+    	this.twoPlayerMode = mode;
+    }
+    
+    public void setColorBlindMode(boolean mode) {
+        this.colorBlindMode = mode;
+    }
+    
+    public void setAdvanceScoreMode(boolean mode) {
+    	this.advanceScore = mode;
     }
     
     public int getNumPlayers() {
@@ -49,8 +78,31 @@ public class Blokus {
         return this.difficulty;
     }
     
-    public int getCurrentTurn() {
-    	return this.currentTurn;
+    public int getTurn() {
+    	return this.turn;
+    }
+    
+    public boolean isFourPlayerMode() {
+    	return this.fourPlayerMode;
+    }
+    
+    public boolean isThreePlayerMode() {
+    	return this.threePlayerMode;
+    }
+    
+    public boolean isTwoPlayerMode() {
+    	return this.twoPlayerMode;
+    }
+    
+    public boolean isColorBlindMode() {
+    	return this.colorBlindMode;
+    }
+     public boolean isAdvanceScore() {
+    	 return this.advanceScore;
+     }
+     
+    public Shapes getShapes() {
+    	return this.shapes;
     }
     
     public Player getPlayers(int i) {
@@ -58,25 +110,67 @@ public class Blokus {
     }
     
     public void startGame() {
-    	int colormode = 0;
-    	players = new Player [4];
-    	for(int i = 0; i < getNumPlayers(); ++i) {
-    		if(colorBlindMode) {
-    			colormode = 5;
+    	int color = 0;
+    	this.turn = 0;
+    	players = new Player[4];
+    	for(int i = 0; i < 4; ++i) {
+    		if(isColorBlindMode()) {
+    			color = i + 5;
     		}
     		else {
-    			colormode = i + 1;
+    			color = i + 1;
     		}
     		if(i < getHumanPlayers()) {
-    			HumanPlayer human = new HumanPlayer(colormode); 
+    			HumanPlayer human = new HumanPlayer(color, this.shapes); 
     			players[i] = human;
     		}
     		else {
-    			ComputerPlayer computer = new ComputerPlayer(colormode, difficulty, new BlokusBoard());
+    			ComputerPlayer computer = new ComputerPlayer(color, this.shapes, this.difficulty, new BlokusBoard());
     			players[i] = computer;
     		}
     	}
-    	currentTurn = 0;
     	this.blokusGame = new BlokusGameGUI(this);
+    }
+    
+    public void newTurn() {
+    	++this.turn;
+    	this.turn %= getNumPlayers();
+    	
+    	if (isGameOver()) {
+    		calculateScore();
+    		blokusGame.displayScore();
+    		System.exit(0);
+    	}
+    	
+    	if (!players[getTurn()].getPlaying()) {
+    		newTurn();
+    		return;
+    	}
+    }
+    
+    public boolean isGameOver() {
+    	for (int i = 0; i < getNumPlayers(); i++)
+        {
+    	   if (getPlayers(i).isSquareOneLast()) {
+    		   return true;
+    	   }
+           if (getPlayers(i).getPlaying()) {
+            	return false;
+            }
+        }
+        return true;
+    }
+    
+    public void calculateScore() {
+		if(isAdvanceScore()) {
+			for (int i = 0; i < getNumPlayers(); ++i) {
+				   getPlayers(i).calculateAdvanceScore();
+			}
+		}
+		else {
+			for (int i = 0; i < getNumPlayers(); ++i) {
+				getPlayers(i).calculateBasicScore();
+			}
+		}
     }
 }

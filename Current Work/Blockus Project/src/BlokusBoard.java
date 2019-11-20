@@ -7,6 +7,14 @@ import java.awt.*;
 
 public class BlokusBoard {
 	public static final int BOARD_SIZE = 20;
+    public static final int BLUE = 1;
+    public static final int YELLOW = 2;
+    public static final int RED = 3;
+	public static final int GREEN = 4;
+	public static final int CB_BLUE = 5;
+	public static final int CB_YELLOW = 6;
+	public static final int CB_RED = 7;
+	public static final int CB_GREEN = 8;
 	
 	private Squares[][] grid;
 	
@@ -46,5 +54,20 @@ public class BlokusBoard {
 	
 	public Squares getSquareAt(int x, int y){
 		return this.grid[y][x];
+	}
+	
+	public Point getCorner(int color) {
+		switch(color) 
+		{
+		   case BLUE :
+		   case CB_BLUE: return new Point(BOARD_SIZE - 1, 0);
+		   case YELLOW:
+		   case CB_YELLOW: return new Point(BOARD_SIZE - 1, BOARD_SIZE - 1);
+           case GREEN:
+           case CB_GREEN: return new Point(0, 0);
+           case RED:
+           case CB_RED: return new Point(0, BOARD_SIZE - 1);
+           default: throw new IllegalArgumentException();
+		}
 	}
 }

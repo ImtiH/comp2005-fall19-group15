@@ -7,11 +7,11 @@ public class HumanPlayer implements Player {
 	private LinkedList<Piece> pieces;
 	private boolean firstTurn;
 	private boolean playing;
-	private boolean turn;
+	private boolean squareOneLast;
 	private int points;
 	
-	public HumanPlayer(int color) {
-		Shapes shapes = new Shapes();
+	public HumanPlayer(int color, Shapes shapes) {
+		
 		pieces = new LinkedList<Piece>();
 	    
 	    for (int i = 0; i < 21; i++)
@@ -20,7 +20,8 @@ public class HumanPlayer implements Player {
 	    }
 	    this.firstTurn = true;
 	    this.playing = true;
-	    this.turn = true;
+	    this.squareOneLast = false;
+		this.points = 0;
 	}
 	
 	public void move() {
@@ -28,8 +29,6 @@ public class HumanPlayer implements Player {
 	}
 	
 	public int getScore() {
-		//TODO make Score function.
-		this.points = 0;
 		return points;
 	}
 	
@@ -37,8 +36,58 @@ public class HumanPlayer implements Player {
 		return this.firstTurn;
 	}
 	
+	public boolean getPlaying() {
+		return this.playing;
+	}
+	
+	public boolean isSquareOneLast() {
+		return this.squareOneLast;
+	}
+	
+	public void setPlaying(boolean s) {
+		this.playing = s;
+	}
+	
 	public void setFirstTurn(boolean firstTurn) {
 		this.firstTurn = firstTurn;
+	}
+	
+	public void setSquareOneLast(boolean s) {
+		this.squareOneLast = s;
+	}
+	
+	public void calculateBasicScore() {
+		for(int i = 0; i < this.getPieces().size(); ++i) {
+			Piece temp = this.getPieces().get(i);
+			for(int j = 0; j < Piece.SHAPE_SIZE; ++j) {
+				for(int k = 0; k < Piece.SHAPE_SIZE; ++k) {
+					if(temp.getValue(k, j) == Piece.PIECE) {
+						++this.points;
+					}
+				}
+			}
+		}
+	}
+	
+	public void calculateAdvanceScore() {
+		if(this.getPieces().size() == 0) {
+			this.points += 15;
+			if(isSquareOneLast()) {
+				this.points += 5;
+			}
+		}
+		else {
+			for(int i = 0; i < this.getPieces().size(); ++i) {
+				Piece temp = this.getPieces().get(i);
+				for(int j = 0; j < Piece.SHAPE_SIZE; ++j) {
+					for(int k = 0; k < Piece.SHAPE_SIZE; ++k) {
+						if(temp.getValue(k, j) == Piece.PIECE) {
+							--this.points;
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public LinkedList<Piece> getPieces() {

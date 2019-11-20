@@ -8,13 +8,12 @@ import javax.swing.*;
 public class SettingsGUI extends JFrame implements ActionListener {
     private JPanel options;
     private JButton run;
-    private JCheckBox colorBlindMode;
+    private JCheckBox colorBlindMode, AdvanceScoreMode;
     private JComboBox playerNumber, humanNumber, computerDifficulty;
     private JLabel playof, human, diff;
-    private String playerNum[] = {"2", "3", "4"};
-    private String humanNum[] = {"1", "2", "3", "4"};
     private String computerDiff[] = {"Easy", "Normal", "Hard"};
     private Blokus game;
+    private int one = 1, two = 2, three = 3, four = 4;
     
     /**
      * Constructor for objects of class GUI
@@ -26,18 +25,30 @@ public class SettingsGUI extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         
         options = new JPanel();
-        options.setLayout(new GridLayout(4, 2));
+        options.setLayout(new GridLayout(5, 2));
         options.setSize(300, 200);
 
-        playerNumber = new JComboBox(playerNum);
+        playerNumber = new JComboBox();
+        playerNumber.addItem(four);
+        playerNumber.addItem(three);
+        playerNumber.addItem(two);
         playerNumber.addActionListener(this);
-        humanNumber = new JComboBox(humanNum);
+        
+        humanNumber = new JComboBox();
+        humanNumber.addItem(four);
+        humanNumber.addItem(three);
+        humanNumber.addItem(two);
+        humanNumber.addItem(one);
         humanNumber.addActionListener(this);
+        
         computerDifficulty = new JComboBox(computerDiff);
         computerDifficulty.addActionListener(this);
         
         colorBlindMode = new JCheckBox("ColorBlindMode");
         colorBlindMode.addActionListener(this);
+        
+        AdvanceScoreMode = new JCheckBox("AdvanceScoreMode");
+        AdvanceScoreMode.addActionListener(this);
         
         run = new JButton("Click to Start Game!");
         run.addActionListener(this);
@@ -53,8 +64,9 @@ public class SettingsGUI extends JFrame implements ActionListener {
         options.add(diff);
         options.add(computerDifficulty);
         options.add(colorBlindMode);
+        options.add(AdvanceScoreMode);
         options.add(run);
-       
+        
         options.setVisible(true);
         
         getContentPane().setLayout(null);
@@ -68,10 +80,10 @@ public class SettingsGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object selected = e.getSource();
 		if(selected.equals(playerNumber)) {
-			game.setNumPlayers(playerNumber.getSelectedIndex() + 2);
+			game.setNumPlayers((int) playerNumber.getSelectedItem());
 		}
 		else if(selected.equals(humanNumber)) {
-			game.setHumanPlayers(humanNumber.getSelectedIndex() + 1);
+			game.setHumanPlayers((int) humanNumber.getSelectedItem());
 		}
 		else if(selected.equals(computerDifficulty)) {
 			game.setDifficulty(computerDifficulty.getSelectedIndex());
@@ -82,6 +94,14 @@ public class SettingsGUI extends JFrame implements ActionListener {
 			}
 			else {
 				game.setColorBlindMode(false);
+			}
+		}
+		else if(selected.equals(AdvanceScoreMode)) {
+			if(AdvanceScoreMode.isSelected()) {
+				game.setAdvanceScoreMode(true);
+			}
+			else {
+				game.setAdvanceScoreMode(false);
 			}
 		}
 		else if(selected.equals(run)) {

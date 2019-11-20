@@ -9,7 +9,19 @@ public interface Player {
 	
 	boolean getFirstTurn();
 	
+    boolean getPlaying();
+    
+    boolean isSquareOneLast();
+	
 	void setFirstTurn(boolean firstTurn);
+	
+	void setPlaying(boolean p);
+	
+	void setSquareOneLast(boolean s);
+	
+	void calculateBasicScore();
+	
+	void calculateAdvanceScore();
 	
 	int getScore();
 	

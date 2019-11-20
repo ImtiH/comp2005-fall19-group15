@@ -9,59 +9,95 @@ import javax.swing.*;
 public class BlokusGameGUI extends JFrame {
 	public static final int WHITE = 0;
     public static final int BLUE = 1;
-    public static final int RED = 2;
-    public static final int YELLOW = 3;
+    public static final int YELLOW = 2;
+    public static final int RED = 3;
 	public static final int GREEN = 4;
+	public static final int CB_BLUE = 5;
+	public static final int CB_YELLOW = 6;
+	public static final int CB_RED = 7;
+	public static final int CB_GREEN = 8;
 	public static final int BOARD_RESOLUTION = 500;
 	public static final int PIECE_RESOLUTION = 120;
 	public static final Color GRID_LINE_COLOR = Color.GRAY;
 	public static final Color PIECE_LINE_COLOR = Color.BLACK;
 	
 	private Point selected;
-	public Point po = new Point(0,0); // temporary variable will be remove in later iteration.
+	
 	private int index;
 	
 	private JPanel board;
 	private JPanel pieces;
+	private JPanel westPanel;
+	private JPanel northPanel;
 	private JLabel boardLabel;
 	private BlokusPieceLabel piecesLabel;
+	private JButton surrender;
+	private JButton save;
+	private JButton load;
+	private JButton back;
+	private JLabel prompt;
 	private JScrollPane pageScroll;
 	private ImageIcon boardImage;
 	private BlokusBoard displayGrid;
 	private BlokusBoard temp;
 	private Blokus game;
+	
 	//Constuctor
 	BlokusGameGUI(Blokus game) {
 		this.game = game;
 		this.displayGrid = new BlokusBoard();
 		this.temp = new BlokusBoard();
-		this.setSize(660,540);
+		this.setSize(649,570);
         this.setTitle("Blokus");
         this.setLocationRelativeTo(null);
         
         this.board = new JPanel();
         this.pieces = new JPanel();
+        this.westPanel = new JPanel();
+        this.northPanel = new JPanel();
         
-        this.pieces.setLayout(new BoxLayout(pieces, BoxLayout.PAGE_AXIS));
+        this.westPanel.setLayout(new BoxLayout(this.westPanel, BoxLayout.PAGE_AXIS));
+        this.westPanel.setPreferredSize(new Dimension(PIECE_RESOLUTION + 20, BOARD_RESOLUTION - 30));
         
-        this.pageScroll = new JScrollPane(pieces);
+        this.pieces.setLayout(new BoxLayout(this.pieces, BoxLayout.PAGE_AXIS));
+        
+        this.pageScroll = new JScrollPane(this.pieces);
         
         this.pageScroll.getVerticalScrollBar().setUnitIncrement(PIECE_RESOLUTION / 3);
-        this.pageScroll.setPreferredSize(new Dimension(PIECE_RESOLUTION + 20, BOARD_RESOLUTION  - 30));
+        
+        this.surrender = new JButton("Surrender");
+        this.surrender.setPreferredSize(new Dimension(PIECE_RESOLUTION, 30));
+        this.surrender.addActionListener(new SurrenderListener());
+        
+        this.westPanel.add(this.pageScroll);
+        this.westPanel.add(this.surrender);
+        
+        this.prompt = new JLabel("Player " + (game.getTurn() + 1) + "'s Turn");
+        
+        this.save = new JButton("Save");
+        this.load= new JButton("Load");
+        this.back = new JButton("Back");
+        
+        this.northPanel.add(prompt);
+        
+        this.northPanel.add(save);
+        this.northPanel.add(load);
+        this.northPanel.add(back);
         
         this.boardImage = new ImageIcon(this.renderBoard());
-        this.boardLabel = new JLabel(boardImage);
+        this.boardLabel = new JLabel(this.boardImage);
         BoardLabelMouseListener blms = new BoardLabelMouseListener();
         this.boardLabel.addMouseListener(blms);
         this.boardLabel.addMouseMotionListener(blms);
         this.boardLabel.addMouseWheelListener(blms);
-        this.board.add(boardLabel);
+        this.board.add(this.boardLabel);
         
         drawPlayerPieces();
         
         getContentPane().setLayout( new BorderLayout());
         getContentPane().add( this.board, BorderLayout.CENTER);
-        getContentPane().add(this.pageScroll, BorderLayout.WEST);
+        getContentPane().add( this.westPanel, BorderLayout.WEST);
+        getContentPane().add( this.northPanel, BorderLayout.NORTH);
         
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -123,8 +159,8 @@ public class BlokusGameGUI extends JFrame {
 	
 	public void drawPlayerPieces() {
 		pieces.removeAll();
-		for(int i = 0; i < game.getPlayers(game.getCurrentTurn()).getPieces().size(); i++) {
-			piecesLabel = new BlokusPieceLabel(i, game.getPlayers(game.getCurrentTurn()).getPieces().get(i));
+		for(int i = 0; i < game.getPlayers(game.getTurn()).getPieces().size(); i++) {
+			piecesLabel = new BlokusPieceLabel(i, game.getPlayers(game.getTurn()).getPieces().get(i));
 			piecesLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			piecesLabel.addMouseListener(new PieceLabelMouseListener());
 			pieces.add(piecesLabel);
@@ -145,12 +181,12 @@ public class BlokusGameGUI extends JFrame {
 				if(isInBounds(x + xOff, y + yOff)) {
 					if(displayGrid.getSquareAt(x + xOff, y + yOff).getValue() != 0) {
 						if(p.getValue(x, y) == Piece.PIECE) return false;
-						if(displayGrid.getSquareAt(x + xOff, y + yOff).getColor() == p.getColor()) {
+						if(displayGrid.getSquareAt(x + xOff, y + yOff).getColorNum() == p.getColorNum()) {
 							if(p.getValue(x, y) == Piece.ADJACENT) return false;
 							if(p.getValue(x, y) == Piece.CORNER) corner = true;
 						}
 					}
-					else if(firstMove && p.getValue(x, y) == Piece.PIECE && new Point(x +xOff, y + yOff).equals(po)) corner = true;
+					else if(firstMove && p.getValue(x, y) == Piece.PIECE && new Point(x + xOff, y + yOff).equals(displayGrid.getCorner(p.getColorNum()))) corner = true;
 				}
 				else {
 					if (p.getValue(x, y) == Piece.PIECE) return false;
@@ -163,14 +199,16 @@ public class BlokusGameGUI extends JFrame {
 	
 	public void placePiece(Piece p, int xOff, int yOff, boolean firstMove) {
 		if(isValidMove(p, xOff, yOff, firstMove)) {
+			if(firstMove) {
+				game.getPlayers(game.getTurn()).setFirstTurn(false);
+			}
+			if(oneSquarePlacedLast(p)) {
+				game.getPlayers(game.getTurn()).setSquareOneLast(true);
+			}
 			displayGrid.placePiece(p, xOff, yOff, firstMove);
 			drawBoard();
-			game.getPlayers(0).getPieces().remove(index);
-			drawPlayerPieces();
-			setVisible(true);
-			if(firstMove) {
-				game.getPlayers(0).setFirstTurn(false);
-			}
+			game.getPlayers(game.getTurn()).getPieces().remove(index);
+			newTurn();
 		}
 	}
 	
@@ -197,21 +235,47 @@ public class BlokusGameGUI extends JFrame {
     }
 	
 	public void rotateClockwise() {
-		game.getPlayers(0).getPieces().get(index).rotateClockwise();
-		moveDisplay(game.getPlayers(0).getPieces().get(index), selected.x, selected.y);
+		game.getPlayers(game.getTurn()).getPieces().get(index).rotateClockwise();
+		moveDisplay(game.getPlayers(game.getTurn()).getPieces().get(index), selected.x, selected.y);
 		drawBoard();
 	}
 	
 	public void rotateCounterClockwise() {
-		game.getPlayers(0).getPieces().get(index).rotateCounterClockwise();
-		moveDisplay(game.getPlayers(0).getPieces().get(index), selected.x, selected.y);
+		game.getPlayers(game.getTurn()).getPieces().get(index).rotateCounterClockwise();
+		moveDisplay(game.getPlayers(game.getTurn()).getPieces().get(index), selected.x, selected.y);
 		drawBoard();
 	}
 	
 	public void flip() {
-		game.getPlayers(0).getPieces().get(index).flip();
-		moveDisplay(game.getPlayers(0).getPieces().get(index), selected.x, selected.y);
+		game.getPlayers(game.getTurn()).getPieces().get(index).flip();
+		moveDisplay(game.getPlayers(game.getTurn()).getPieces().get(index), selected.x, selected.y);
 		drawBoard();
+	}
+	
+	public void newTurn() {
+		game.newTurn();
+		this.prompt.setText("Player " + (game.getTurn() + 1) + "'s Turn");
+		drawPlayerPieces();
+		setVisible(true);
+	}
+	
+	public boolean oneSquarePlacedLast(Piece p) {
+		if(game.getPlayers(game.getTurn()).getPieces().size() == 1 && p.getShape().equals(game.getShapes().getShape(20))) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void displayScore() {
+		StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < game.getNumPlayers(); ++i) {
+        	sb.append("Player " + (i + 1));
+            sb.append(": ");
+            sb.append(game.getPlayers(i).getScore());
+            sb.append(" Points!");
+            sb.append("\n");
+        }
+        JOptionPane.showMessageDialog(this, sb.toString(), "Game Over", JOptionPane.INFORMATION_MESSAGE );
 	}
 	
 	public class BlokusPieceLabel extends JLabel {  
@@ -231,7 +295,7 @@ public class BlokusGameGUI extends JFrame {
                flip();
             }
 			else {
-				placePiece(game.getPlayers(0).getPieces().get(index), selected.x - Piece.SHAPE_SIZE / 2, selected.y - Piece.SHAPE_SIZE / 2, game.getPlayers(0).getFirstTurn());
+				placePiece(game.getPlayers(game.getTurn()).getPieces().get(index), selected.x - Piece.SHAPE_SIZE / 2, selected.y - Piece.SHAPE_SIZE / 2, game.getPlayers(game.getTurn()).getFirstTurn());
 			}
 		}
 
@@ -269,7 +333,7 @@ public class BlokusGameGUI extends JFrame {
 			Point p = displayGrid.getCoordinates(e.getPoint(), BOARD_RESOLUTION);
 			if(!p.equals(selected)) {
 				selected = p;
-				moveDisplay(game.getPlayers(0).getPieces().get(index), selected.x, selected.y);
+				moveDisplay(game.getPlayers(game.getTurn()).getPieces().get(index), selected.x, selected.y);
 				drawBoard();
 			}
 		}
@@ -320,5 +384,12 @@ public class BlokusGameGUI extends JFrame {
 			
 		}
     	
+    }
+    
+    private class SurrenderListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            game.getPlayers(game.getTurn()).setPlaying(false);
+            newTurn();
+       }
     }
 }
