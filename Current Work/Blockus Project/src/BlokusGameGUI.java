@@ -254,6 +254,7 @@ public class BlokusGameGUI extends JFrame {
 	
 	public void newTurn() {
 		game.newTurn();
+		this.index = 0;
 		this.prompt.setText("Player " + (game.getTurn() + 1) + "'s Turn");
 		drawPlayerPieces();
 		setVisible(true);
