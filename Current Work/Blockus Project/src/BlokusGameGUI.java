@@ -23,9 +23,9 @@ public class BlokusGameGUI extends JFrame {
 	public static final Color GRID_LINE_COLOR = Color.GRAY;
 	public static final Color PIECE_LINE_COLOR = Color.BLACK;
 	
-	private Point selected;
+	private Point selected = new Point(0,0);
 	
-	private int index;
+	private int index = 0;
 	
 	private JPanel board;
 	private JPanel pieces;

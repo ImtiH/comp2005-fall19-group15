@@ -5,10 +5,9 @@ import java.util.LinkedList;
 
 public class ComputerPlayer implements Player {
 	
-	public static final int NONE = 0;
-	public static final int EASY = 1;
-	public static final int NORMAL = 2;
-	public static final int HARD = 3;
+	public static final int EASY = 0;
+	public static final int NORMAL = 1;
+	public static final int HARD = 2;
 	
 	private LinkedList<Piece> pieces;
 	private boolean firstTurn;
@@ -30,7 +29,9 @@ public class ComputerPlayer implements Player {
 	    this.firstTurn = true;
 	    this.playing = true;
 	    this.turn = true;
+	    this.squareOneLast = false;
 	    this.difficulty = difficulty;
+	    this.points = 0;
 	    this.strategy = setStrategy(this.difficulty);
 	    this.boardState = boardState;
 	}
@@ -40,13 +41,15 @@ public class ComputerPlayer implements Player {
 	    this.playing = true;
 	    this.turn = true;
 	    this.squareOneLast = false;
-	    this.difficulty = 1;
+	    this.difficulty = 0;
 	    this.points = 0;
+	    this.boardState = new BlokusBoard();
 	    pieces = new LinkedList<Piece>();
 	}
 
 	public void move(BlokusGameGUI blokusGame ) {
-		strategy.makeMove(blokusGame);
+		this.strategy.makeMove(blokusGame);
+		blokusGame.newTurn();
 	}
 	
 	public StrategyInterface setStrategy(int difficulty) {
@@ -56,6 +59,23 @@ public class ComputerPlayer implements Player {
 		case(HARD): return new hardStrategy();
 		default: return null;
 		}
+	}
+	
+	public void loadStrategy(int difficulty) {
+		switch(difficulty) {
+		case(EASY): this.strategy = new easyStrategy();
+		case(NORMAL): this.strategy = new normalStrategy();
+		case(HARD): this.strategy = new hardStrategy();
+		default: return;
+		}
+	}
+	
+	public void setDifficulty(int d) {
+		this.difficulty = d;
+	}
+	
+	public void setBoardState(BlokusBoard b) {
+		this.boardState = b;
 	}
 	
 	public int getScore() {

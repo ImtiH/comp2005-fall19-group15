@@ -31,5 +31,9 @@ public interface Player {
 	
 	LinkedList<Piece> getPieces();
 	
+	void setBoardState(BlokusBoard b);
+	
+	void loadStrategy(int difficulty);
+	
 	void addPiece(int[][] s, int color);
 }

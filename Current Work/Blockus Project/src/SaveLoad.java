@@ -16,6 +16,7 @@ public class SaveLoad {
 	public static void saveSettings(Blokus game) {
 		settingsData += game.getNumPlayers();
 		settingsData += game.getHumanPlayers();
+		settingsData += game.getDifficulty();
 		settingsData += game.getBlokusGame().getIndex();
 		settingsData += game.getTurn() + "\n";
 		settingsData += game.isColorBlindMode() + "\n";
@@ -77,9 +78,11 @@ public class SaveLoad {
 				//System.out.println(game.getNumPlayers());
 				game.setHumanPlayers(line.charAt(1) - '0');
 				//System.out.println(game.getHumanPlayers());
-				game.getBlokusGame().setIndex(line.charAt(2) - '0');
+				game.setDifficulty((line.charAt(2) - '0'));
+				//System.out.println(game.getDifficulty());
+				game.getBlokusGame().setIndex(line.charAt(3) - '0');
 				//System.out.println(game.getBlokusGame().getIndex());
-				game.SetTurn(line.charAt(3) - '0');
+				game.SetTurn(line.charAt(4) - '0');
 				//System.out.println(game.getTurn());
 				line = br.readLine();
 				game.setColorBlindMode(Boolean.parseBoolean(line));
@@ -138,6 +141,15 @@ public class SaveLoad {
 						++index4;
 					}
 				}
+				for(int i = 0; i < 4; ++i) {
+		    		if(i < game.getHumanPlayers()) {
+		    			break;
+		    		}
+		    		else {
+		    			game.getPlayers(i).loadStrategy(game.getDifficulty());
+		    			game.getPlayers(i).setBoardState(game.getBlokusGame().getBlokusBoard());
+		    		}
+		    	}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

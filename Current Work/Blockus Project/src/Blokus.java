@@ -56,7 +56,8 @@ public class Blokus {
     }
     
     public void setPlayerComputer(int num) {
-    	ComputerPlayer computer = new ComputerPlayer(); 
+    	ComputerPlayer computer = new ComputerPlayer();
+    	computer.setStrategy(this.getDifficulty());
     	this.players[num] = computer;
     }
     

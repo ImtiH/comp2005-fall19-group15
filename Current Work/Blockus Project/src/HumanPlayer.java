@@ -114,4 +114,12 @@ public class HumanPlayer implements Player {
 	public LinkedList<Piece> getPieces() {
 		return pieces;
 	}
+	
+	public void setBoardState(BlokusBoard b) {
+		
+	}
+	
+	public void loadStrategy(int difficulty) {
+
+	}
 }
