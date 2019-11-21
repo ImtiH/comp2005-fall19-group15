@@ -78,6 +78,9 @@ public class BlokusGameGUI extends JFrame {
         this.load= new JButton("Load");
         this.back = new JButton("Back");
         
+        this.save.addActionListener(new SaveLoadListener());
+        this.load.addActionListener(new SaveLoadListener());
+        
         this.northPanel.add(prompt);
         
         this.northPanel.add(save);
@@ -391,5 +394,20 @@ public class BlokusGameGUI extends JFrame {
             game.getPlayers(game.getTurn()).setPlaying(false);
             newTurn();
        }
+    }
+    
+    public class SaveLoadListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			Object selected = e.getSource();
+			if (selected.equals(save)) {
+				SaveLoad.saveSettings(game);
+				SaveLoad.savePlayers(game.getPlayersArray());
+				SaveLoad.saveBoardState(displayGrid);
+				SaveLoad.SaveGame();
+			}
+			else if (selected.equals(load)) {
+				
+			}
+		}
     }
 }

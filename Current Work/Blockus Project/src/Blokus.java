@@ -109,6 +109,10 @@ public class Blokus {
     	return this.players[i];
     }
     
+    public Player[] getPlayersArray() {
+    	return this.players;
+    }
+    
     public void startGame() {
     	int color = 0;
     	this.turn = 0;

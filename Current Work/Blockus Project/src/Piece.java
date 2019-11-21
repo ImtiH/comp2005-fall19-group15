@@ -55,6 +55,10 @@ public class Piece {
 		return this.shape;
 	}
 	
+	public void setValue(int x, int y, int v) {
+		this.shape[y][x] = v;
+	}
+	
 	public void rotateClockwise() {
 		int[][] temp = new int[SHAPE_SIZE][SHAPE_SIZE];
 		
