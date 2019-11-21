@@ -5,13 +5,17 @@ import java.util.LinkedList;
  */
 public interface Player {
 	
-	void move();
+	void move(BlokusGameGUI blokusGame);
 	
 	boolean getFirstTurn();
 	
     boolean getPlaying();
     
     boolean isSquareOneLast();
+    
+    boolean getTurn();
+    
+    void setTurn(boolean t);
 	
 	void setFirstTurn(boolean firstTurn);
 	

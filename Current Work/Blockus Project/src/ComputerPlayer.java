@@ -37,8 +37,9 @@ public class ComputerPlayer implements Player {
 	    pieces = new LinkedList<Piece>();
 	}
 
-	public void move() {
-		//TODO make move function.
+	public void move(BlokusGameGUI blokusGame) {
+		this.boardState = blokusGame.getBlokusBoard();
+		Strategey.getStrategey(this.difficulty, this.boardState, blokusGame);
 	}
 	
 	public int getScore() {
@@ -55,6 +56,14 @@ public class ComputerPlayer implements Player {
 	
 	public boolean isSquareOneLast() {
 		return this.squareOneLast;
+	}
+	
+	public boolean getTurn() {
+		return this.turn;
+	}
+	
+	public void setTurn(boolean t) {
+		this.turn = t;
 	}
 	
 	public void setPlaying(boolean s) {

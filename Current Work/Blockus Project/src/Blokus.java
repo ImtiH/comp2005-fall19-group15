@@ -172,6 +172,8 @@ public class Blokus {
     		newTurn();
     		return;
     	}
+    	
+    	getPlayers(getTurn()).move(getBlokusGame());
     }
     
     public boolean isGameOver() {

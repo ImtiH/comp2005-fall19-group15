@@ -7,6 +7,7 @@ public class HumanPlayer implements Player {
 	private LinkedList<Piece> pieces;
 	private boolean firstTurn;
 	private boolean playing;
+	private boolean turn;
 	private boolean squareOneLast;
 	private int points;
 	
@@ -32,8 +33,8 @@ public class HumanPlayer implements Player {
 		this.pieces = new LinkedList<Piece>();
 	}
 
-	public void move() {
-		//TODO make move function.
+	public void move(BlokusGameGUI blokusGame) {
+		setTurn(true);
 	}
 	
 	public int getScore() {
@@ -48,8 +49,16 @@ public class HumanPlayer implements Player {
 		return this.playing;
 	}
 	
+	public boolean getTurn() {
+		return this.turn;
+	}
+	
 	public boolean isSquareOneLast() {
 		return this.squareOneLast;
+	}
+	
+	public void setTurn(boolean t) {
+		this.turn = t;
 	}
 	
 	public void setPlaying(boolean s) {

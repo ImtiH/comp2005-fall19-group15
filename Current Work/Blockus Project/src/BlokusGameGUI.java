@@ -125,6 +125,10 @@ public class BlokusGameGUI extends JFrame {
 		this.index = n;
 	}
 	
+	public Blokus getGame() {
+		return this.game;
+	}
+	
 	public BufferedImage renderBoard() {
 		BufferedImage image = new BufferedImage(BOARD_RESOLUTION, BOARD_RESOLUTION, BufferedImage.TYPE_INT_RGB);
 	    int cellSize = BOARD_RESOLUTION / (BlokusBoard.BOARD_SIZE);
