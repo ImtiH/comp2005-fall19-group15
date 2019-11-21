@@ -19,7 +19,7 @@ public class Blokus {
     public Blokus() {
         this.numberPlayers = 4;
         this.humanPlayers = 4;
-        this.difficulty = 0;
+        this.difficulty = 1;
         this.fourPlayerMode = true;
         this.threePlayerMode = false;
         this.twoPlayerMode = false;
