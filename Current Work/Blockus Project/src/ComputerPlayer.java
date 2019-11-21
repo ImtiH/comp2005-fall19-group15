@@ -4,6 +4,12 @@
 import java.util.LinkedList;
 
 public class ComputerPlayer implements Player {
+	
+	public static final int NONE = 0;
+	public static final int EASY = 1;
+	public static final int NORMAL = 2;
+	public static final int HARD = 3;
+	
 	private LinkedList<Piece> pieces;
 	private boolean firstTurn;
 	private boolean playing;
@@ -12,6 +18,7 @@ public class ComputerPlayer implements Player {
 	private int points;
 	private int difficulty;
 	private BlokusBoard boardState;
+	private StrategyInterface strategy;
 	
 	public ComputerPlayer(int color, Shapes shapes, int difficulty, BlokusBoard boardState) {
 		pieces = new LinkedList<Piece>();
@@ -24,6 +31,7 @@ public class ComputerPlayer implements Player {
 	    this.playing = true;
 	    this.turn = true;
 	    this.difficulty = difficulty;
+	    this.strategy = setStrategy(this.difficulty);
 	    this.boardState = boardState;
 	}
 	
@@ -37,9 +45,17 @@ public class ComputerPlayer implements Player {
 	    pieces = new LinkedList<Piece>();
 	}
 
-	public void move(BlokusGameGUI blokusGame) {
-		this.boardState = blokusGame.getBlokusBoard();
-		Strategey.getStrategey(this.difficulty, this.boardState, blokusGame);
+	public void move(BlokusGameGUI blokusGame ) {
+		strategy.makeMove(blokusGame);
+	}
+	
+	public StrategyInterface setStrategy(int difficulty) {
+		switch(difficulty) {
+		case(EASY): return new easyStrategy();
+		case(NORMAL): return new normalStrategy();
+		case(HARD): return new hardStrategy();
+		default: return null;
+		}
 	}
 	
 	public int getScore() {
