@@ -12,7 +12,7 @@ public class HumanPlayer implements Player {
 	
 	public HumanPlayer(int color, Shapes shapes) {
 		
-		pieces = new LinkedList<Piece>();
+		this.pieces = new LinkedList<Piece>();
 	    
 	    for (int i = 0; i < 21; i++)
 	    {
@@ -24,6 +24,14 @@ public class HumanPlayer implements Player {
 		this.points = 0;
 	}
 	
+	public HumanPlayer() {
+		this.firstTurn = true;
+	    this.playing = true;
+	    this.squareOneLast = false;
+		this.points = 0;
+		this.pieces = new LinkedList<Piece>();
+	}
+
 	public void move() {
 		//TODO make move function.
 	}
@@ -54,6 +62,10 @@ public class HumanPlayer implements Player {
 	
 	public void setSquareOneLast(boolean s) {
 		this.squareOneLast = s;
+	}
+	
+	public void addPiece(int[][] s, int color) {
+		this.pieces.add(new Piece(s, color));
 	}
 	
 	public void calculateBasicScore() {

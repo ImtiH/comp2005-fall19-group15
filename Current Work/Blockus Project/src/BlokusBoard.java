@@ -53,7 +53,7 @@ public class BlokusBoard {
 	}
 	
 	public Squares getSquareAt(int x, int y){
-		return this.grid[y][x];
+		return grid[y][x];
 	}
 	
 	public Point getCorner(int color) {

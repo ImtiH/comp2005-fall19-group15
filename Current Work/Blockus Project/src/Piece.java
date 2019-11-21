@@ -55,6 +55,10 @@ public class Piece {
 		return this.shape;
 	}
 	
+	public void setColorNum(int num) {
+		this.color = num;
+	}
+	
 	public void setValue(int x, int y, int v) {
 		this.shape[y][x] = v;
 	}

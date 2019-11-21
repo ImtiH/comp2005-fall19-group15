@@ -46,6 +46,20 @@ public class Blokus {
     	this.turn = num;
     }
     
+    public void setPlayers(int num) {
+    	this.players = new Player[num];
+    }
+    
+    public void setPlayerHuman(int num) {
+    	HumanPlayer human = new HumanPlayer(); 
+    	this.players[num] = human;
+    }
+    
+    public void setPlayerComputer(int num) {
+    	ComputerPlayer computer = new ComputerPlayer(); 
+    	this.players[num] = computer;
+    }
+    
     public void setFourPlayerMode(boolean mode) {
     	this.fourPlayerMode = mode;
     }
@@ -80,6 +94,14 @@ public class Blokus {
     
     public int getTurn() {
     	return this.turn;
+    }
+    
+    public boolean getColorBlindMode() {
+    	return this.colorBlindMode;
+    }
+    
+    public boolean getAdvanceScoreMode() {
+    	return this.advanceScore;
     }
     
     public boolean isFourPlayerMode() {
@@ -133,7 +155,7 @@ public class Blokus {
     			players[i] = computer;
     		}
     	}
-    	this.blokusGame = new BlokusGameGUI(this);
+    	this.setBlokusGame(new BlokusGameGUI(this));
     }
     
     public void newTurn() {
@@ -142,7 +164,7 @@ public class Blokus {
     	
     	if (isGameOver()) {
     		calculateScore();
-    		blokusGame.displayScore();
+    		getBlokusGame().displayScore();
     		System.exit(0);
     	}
     	
@@ -177,4 +199,12 @@ public class Blokus {
 			}
 		}
     }
+
+	public BlokusGameGUI getBlokusGame() {
+		return blokusGame;
+	}
+
+	public void setBlokusGame(BlokusGameGUI blokusGame) {
+		this.blokusGame = blokusGame;
+	}
 }

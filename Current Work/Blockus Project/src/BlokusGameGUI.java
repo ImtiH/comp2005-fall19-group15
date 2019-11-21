@@ -4,6 +4,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 import javax.swing.*;
 
 public class BlokusGameGUI extends JFrame {
@@ -107,6 +109,22 @@ public class BlokusGameGUI extends JFrame {
 		setVisible(true);
 	}
 	
+	public BlokusBoard getBlokusBoard() {
+		return displayGrid;
+	}
+
+	public void setBlokuBoard(BlokusBoard blokusBoard) {
+		this.displayGrid = blokusBoard;
+	}
+	
+	public int getIndex() {
+		return this.index;
+	}
+	
+	public void setIndex(int n) {
+		this.index = n;
+	}
+	
 	public BufferedImage renderBoard() {
 		BufferedImage image = new BufferedImage(BOARD_RESOLUTION, BOARD_RESOLUTION, BufferedImage.TYPE_INT_RGB);
 	    int cellSize = BOARD_RESOLUTION / (BlokusBoard.BOARD_SIZE);
@@ -162,7 +180,7 @@ public class BlokusGameGUI extends JFrame {
 	
 	public void drawPlayerPieces() {
 		pieces.removeAll();
-		for(int i = 0; i < game.getPlayers(game.getTurn()).getPieces().size(); i++) {
+		for(int i = 0; i < game.getPlayers(game.getTurn()).getPieces().size(); ++i) {
 			piecesLabel = new BlokusPieceLabel(i, game.getPlayers(game.getTurn()).getPieces().get(i));
 			piecesLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			piecesLabel.addMouseListener(new PieceLabelMouseListener());
@@ -406,7 +424,15 @@ public class BlokusGameGUI extends JFrame {
 				SaveLoad.SaveGame();
 			}
 			else if (selected.equals(load)) {
-				
+				try {
+					SaveLoad.LoadGame(game);
+					drawPlayerPieces();
+					drawBoard();
+					setVisible(true);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
     }

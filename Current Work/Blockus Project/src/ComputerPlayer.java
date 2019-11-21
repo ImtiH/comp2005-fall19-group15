@@ -27,6 +27,16 @@ public class ComputerPlayer implements Player {
 	    this.boardState = boardState;
 	}
 	
+	public ComputerPlayer() {
+		this.firstTurn = true;
+	    this.playing = true;
+	    this.turn = true;
+	    this.squareOneLast = false;
+	    this.difficulty = 1;
+	    this.points = 0;
+	    pieces = new LinkedList<Piece>();
+	}
+
 	public void move() {
 		//TODO make move function.
 	}
@@ -57,6 +67,10 @@ public class ComputerPlayer implements Player {
 	
 	public void setSquareOneLast(boolean s) {
 		this.squareOneLast = s;
+	}
+	
+	public void addPiece(int[][] s, int color) {
+		this.pieces.add(new Piece(s, color));
 	}
 	
 	public void calculateBasicScore() {

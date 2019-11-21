@@ -26,5 +26,6 @@ public interface Player {
 	int getScore();
 	
 	LinkedList<Piece> getPieces();
-
+	
+	void addPiece(int[][] s, int color);
 }
